@@ -21,6 +21,8 @@ const buildKeywordLookup = categoriesLookup => {
 }
 
 const keywordLookup = buildKeywordLookup(categoriesLookup)
+const keywords = Object.keys(keywordLookup)
+const categories = Object.values(keywordLookup)
 
 const csvRaw = ''
 
@@ -31,5 +33,19 @@ const csvHeaderRow = csvArray[0]
 const indexTag = csvHeaderRow.length
 
 const csvArrayTagged = csvArray.map(row => {
+  const columnsWithLetters = row.filter(column => /[A-Za-z]/.test(column))
 
+  let keywordIndex = null
+
+  // [x  x  x  x[y  y(matches)  y]]
+
+  columnsWithLetters.forEach(column => {
+    keywords.forEach((keyword, iterationIndex) => {
+      const keywordUpperCase = keyword.toUpperCase()
+      if (column.toUpperCase().includes(keywordUpperCase)) {
+        keywordIndex = iterationIndex
+        break
+      }
+    })
+  })
 })
