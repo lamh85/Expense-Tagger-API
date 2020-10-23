@@ -26,7 +26,7 @@ const categories = Object.values(keywordLookup)
 
 const csvRaw = ''
 
-const csvArray = csvRaw.split(/(\\r\\n|\\n)/).map(row => row.split(','))
+const csvArray = csvRaw.split(/\r\n|\n/).map(row => row.split(','))
 
 const csvArrayTagged = csvArray.map((row, index) => {
   if (index == 0) return row
