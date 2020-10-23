@@ -35,19 +35,19 @@ const csvArrayTagged = csvArray.map((row, index) => {
 
   let keywordIndex = null
 
-  columnsWithLetters.forEach(column => {
+  for (let column of columnsWithLetters) {
     // Don't check the other columns if we already match a keyword
     if (keywordIndex) break
 
-    keywords.forEach((keyword, iterationIndex) => {
+    for (let [iterationIndex, keyword] of keywords) {
       const keywordUpperCase = keyword.toUpperCase()
       if (column.toUpperCase().includes(keywordUpperCase)) {
         keywordIndex = iterationIndex
         // Don't check other keywords if already found one
         break
       }
-    })
-  })
+    }
+  }
 
   if (keywordIndex) {
     const category = categories[keywordIndex]
