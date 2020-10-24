@@ -28,29 +28,31 @@ const csvRaw = ''
 
 const csvArray = csvRaw.split(/\r\n|\n/).map(row => row.split(','))
 
-const csvArrayTagged = csvArray.map((row, index) => {
-  if (index == 0) return row
+const isNumber = testSubject => Number.isInteger(testSubject)
+
+const csvArrayTagged = csvArray.map((row, rowIndex) => {
+  if (rowIndex == 0) return row
 
   const columnsWithLetters = row.filter(column => /[A-Za-z]/.test(column))
 
-  let keywordIndex = null
+  let matchedKeywordIndex = null
 
   for (let column of columnsWithLetters) {
     // Don't check the other columns if we already match a keyword
-    if (keywordIndex) break
+    if (isNumber(matchedKeywordIndex)) break
 
-    for (let [iterationIndex, keyword] of keywords) {
+    for (let [keywordIndex, keyword] of keywords.entries()) {
       const keywordUpperCase = keyword.toUpperCase()
       if (column.toUpperCase().includes(keywordUpperCase)) {
-        keywordIndex = iterationIndex
+        matchedKeywordIndex = keywordIndex
         // Don't check other keywords if already found one
         break
       }
     }
   }
 
-  if (keywordIndex) {
-    const category = categories[keywordIndex]
+  if (isNumber(matchedKeywordIndex)) {
+    const category = categories[matchedKeywordIndex]
     return [...row, category]
   } else {
     return row
