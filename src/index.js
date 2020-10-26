@@ -1,5 +1,4 @@
-import { isNumber } from './NumberHelper.js'
-import { csvArray } from './CsvFormatter.js'
+import { csvArray } from './CsvReader.js'
 import { findCategory } from './CategoryFinder.js'
 
 const csvArrayTagged = csvArray.map((row, rowIndex) => {
