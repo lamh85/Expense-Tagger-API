@@ -1,11 +1,6 @@
-import fs from fs
 import { isNumber } from './NumberHelper.js'
+import { csvArray } from './CsvFormatter.js'
 import { findCategory } from './CategoryFinder.js'
-import { csvToArray } from './CsvFormatter.js'
-
-const csvRaw = ''
-
-const csvArray = csvToArray(csvRaw)
 
 const csvArrayTagged = csvArray.map((row, rowIndex) => {
   if (rowIndex == 0) return row
@@ -22,3 +17,5 @@ const csvArrayTagged = csvArray.map((row, rowIndex) => {
 
   return [...row, matchedCategory]
 })
+
+console.log(csvArrayTagged)
