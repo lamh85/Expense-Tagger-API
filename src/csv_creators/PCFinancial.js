@@ -1,3 +1,5 @@
+import { findCategory } from './CategoryFinder.js'
+
 const parseAmount = rawAmount => {
   const removedQuotes = rawAmount.replace(/"/g, '')
   const numberType = parseFloat(removedQuotes)
@@ -17,9 +19,13 @@ const parseDate = rawDate => {
 
 const SOURCE_CSV_INDEX = { VENDOR: 0, DATE: 3, AMOUNT: 5 }
 
-const createPcFinancialCsv = csvArray => {
-  return csvArray.map((sourceRow, index) => {
+const SOURCE_CSV_COLUMNS_COUNT = 6
+
+export const createPcFinancialCsv = csvArray => {
+  const mapped = csvArray.map((sourceRow, index) => {
     if (index === 0) return
+    if (!Array.isArray(sourceRow)) return
+    if (sourceRow.length !== SOURCE_CSV_COLUMNS_COUNT) return
 
     const sourceDate = sourceRow[SOURCE_CSV_INDEX.DATE]
     const { day, year, month } = parseDate(sourceDate)
@@ -28,7 +34,10 @@ const createPcFinancialCsv = csvArray => {
     const amount = parseAmount(sourceAmount)
 
     const vendor = sourceRow[SOURCE_CSV_INDEX.VENDOR]
+    const category = findCategory(vendor)
 
-    return { day, year, month, amount, vendor }
+    return { day, year, month, amount, vendor, category }
   })
+
+  return mapped.filter(item => ![undefined, null].includes(item))
 }
