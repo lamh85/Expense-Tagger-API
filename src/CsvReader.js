@@ -43,6 +43,7 @@ export const getVendorIndex = csvArray => {
   console.log('foundIndex ===============')
   console.log(foundIndex)
 
-  if (foundIndex > 0) return foundIndex
+  if (foundIndex >= 0) return foundIndex
+  console.log('did not find index')
   return null
 }
