@@ -6,20 +6,10 @@ import { findCategory } from './CategoryFinder.js'
 
 const appendCategories = (csvArray, vendorIndex) => {
   return csvArray.map((row, rowIndex) => {
-    if (rowIndex == 0) return row
-
-    // const columnsWithLetters = row.filter(column => /[A-Za-z]/.test(column))
-
-    // let matchedCategory = null
+    if (rowIndex == 0) return [...row, 'Category']
 
     const vendor = row[vendorIndex]
     const matchedCategory = findCategory(vendor)
-
-    // for (let column of columnsWithLetters) {
-    //   // Don't check the other columns if we already match a keyword
-    //   if (matchedCategory != null) break
-    //   matchedCategory = findCategory(column)
-    // }
 
     return [...row, matchedCategory]
   })
