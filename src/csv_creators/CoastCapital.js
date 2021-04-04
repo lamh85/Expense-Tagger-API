@@ -1,28 +1,50 @@
 import { findCategory } from './CategoryFinder.js'
 
+const SOURCE_CSV_INDEX = { VENDOR: 2, DATE: 1, AMOUNT: 3 }
+
+const SOURCE_CSV_COLUMNS_COUNT = 5
+
+const parseDate = rawDate => {
+  const removedQuotes = rawDate.replace(/"/g, '')
+  const parts = removedQuotes.split('-')
+
+  const monthRaw = parts[0]
+
+  const monthNumber = {
+    Jan: 1,
+    Feb: 2,
+    Mar: 3,
+    Apr: 4,
+    May: 5,
+    Jun: 6,
+    Jul: 7,
+    Aug: 8,
+    Sep: 9,
+    Oct: 10,
+    Nov: 11,
+    Dec: 12
+  }[monthRaw]
+
+  return {
+    year: parseInt(parts[2]),
+    month: monthNumber,
+    day: parseInt(parts[1])
+  }
+}
+
 const parseAmount = rawAmount => {
   const removedQuotes = rawAmount.replace(/"/g, '')
   const numberType = parseFloat(removedQuotes)
   return Math.abs(numberType)
 }
 
-const parseDate = rawDate => {
-  const removedQuotes = rawDate.replace(/"/g, '')
-  const parts = removedQuotes.split('/')
-
-  return {
-    year: parseInt(parts[2]),
-    month: parseInt(parts[0]),
-    day: parseInt(parts[1])
-  }
-}
-
-const SOURCE_CSV_INDEX = { VENDOR: 0, DATE: 3, AMOUNT: 5 }
-
-const SOURCE_CSV_COLUMNS_COUNT = 6
-
-export const createPcFinancialCsv = csvArray => {
+export const createCoastCapitalObjects = csvArray => {
   const mapped = csvArray.map((sourceRow, index) => {
+    console.log('one row -----------')
+    console.log(sourceRow)
+    console.log(Array.isArray(sourceRow))
+    console.log(sourceRow.length)
+
     if (index === 0) return
     if (!Array.isArray(sourceRow)) return
     if (sourceRow.length !== SOURCE_CSV_COLUMNS_COUNT) return

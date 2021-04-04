@@ -1,7 +1,7 @@
 import { isNumber } from '../NumberHelper.js'
 
 const categoriesLookup = {
-  'Dine out': ['Cafe DOROTHY'],
+  'Dine out': ['Cafe DOROTHY', 'bubble world'],
   'Food': ['Superstore', 't&t', 't and t']
 }
 

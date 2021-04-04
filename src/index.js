@@ -3,6 +3,7 @@ import {
   getVendorIndex
 } from './CsvReader.js'
 import { createPcFinancialCsv } from './csv_creators/PCFinancial.js'
+import { createCoastCapitalObjects } from './csv_creators/CoastCapital.js'
 
 // const appendCategories = (csvArray, vendorIndex) => {
 //   return csvArray.map((row, rowIndex) => {
@@ -16,7 +17,7 @@ const run = () => {
   const csvArray = getCsvArray()
   // const vendorIndex = getVendorIndex(csvArray)
   // return appendCategories(csvArray, vendorIndex)
-  return createPcFinancialCsv(csvArray)
+  return createCoastCapitalObjects(csvArray)
 }
 
 console.dir(run(), { 'maxArrayLength': null })
