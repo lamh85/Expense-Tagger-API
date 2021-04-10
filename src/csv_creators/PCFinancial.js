@@ -36,7 +36,9 @@ export const createPcFinancialCsv = csvArray => {
     const vendor = sourceRow[SOURCE_CSV_INDEX.VENDOR]
     const category = findCategory(vendor)
 
-    return { day, year, month, amount, vendor, category }
+    const bank = 'PC Financial'
+
+    return { day, year, month, amount, vendor, category, bank }
   })
 
   return mapped.filter(item => ![undefined, null].includes(item))
