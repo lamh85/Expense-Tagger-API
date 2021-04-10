@@ -17,7 +17,8 @@ const run = () => {
   const csvArray = getCsvArray()
   // const vendorIndex = getVendorIndex(csvArray)
   // return appendCategories(csvArray, vendorIndex)
-  return createCoastCapitalObjects(csvArray)
+  // return createCoastCapitalObjects(csvArray)
+  return createPcFinancialCsv(csvArray)
 }
 
 console.dir(run(), { 'maxArrayLength': null })

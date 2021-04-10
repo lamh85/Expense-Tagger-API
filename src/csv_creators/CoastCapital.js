@@ -40,11 +40,6 @@ const parseAmount = rawAmount => {
 
 export const createCoastCapitalObjects = csvArray => {
   const mapped = csvArray.map((sourceRow, index) => {
-    console.log('one row -----------')
-    console.log(sourceRow)
-    console.log(Array.isArray(sourceRow))
-    console.log(sourceRow.length)
-
     if (index === 0) return
     if (!Array.isArray(sourceRow)) return
     if (sourceRow.length !== SOURCE_CSV_COLUMNS_COUNT) return
@@ -58,7 +53,9 @@ export const createCoastCapitalObjects = csvArray => {
     const vendor = sourceRow[SOURCE_CSV_INDEX.VENDOR]
     const category = findCategory(vendor)
 
-    return { day, year, month, amount, vendor, category }
+    const bank = 'Coast Capital'
+
+    return { day, year, month, amount, vendor, category, bank }
   })
 
   return mapped.filter(item => ![undefined, null].includes(item))

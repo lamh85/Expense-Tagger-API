@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 
 const getFileString = () => {
-  const csvPath = path.resolve('csv_input', 'coast_capital.csv')
+  const csvPath = path.resolve('csv_input', 'pc_financial.csv')
   const csvBuffer = fs.readFileSync(csvPath)
   return csvBuffer.toString()
 }
