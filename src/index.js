@@ -2,7 +2,6 @@ import path from 'path'
 import fs from 'fs'
 
 import * as BANKS from './bank_names.js'
-import { getCsvArray } from './csv_string_builder.js'
 import { createPcFinancialCsv } from './csv_creators/PCFinancial.js'
 import { createCoastCapitalObjects } from './csv_creators/CoastCapital.js'
 
