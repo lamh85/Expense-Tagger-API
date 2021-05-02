@@ -8,9 +8,13 @@ import { createCoastCapitalObjects } from './csv_creators/CoastCapital.js'
 
 const CSV_INPUT_DIRECTORY = 'csv_input'
 
-export const parseCells = row => {
-  const numberCommasRemoved = row.replace(/([0-9]),([0-9])/, '$1$2')
-  return numberCommasRemoved.split(',')
+export const splitFileStringToCells = fileString => {
+  const rows = fileString.split(/\r\n|\n/)
+
+  return rows.map(row => {
+    const numberCommasRemoved = row.replace(/([0-9]),([0-9])/, '$1$2')
+    return numberCommasRemoved.split(',')
+  })
 }
 
 const identifyBank = cellsOfCsvString => {
@@ -29,6 +33,12 @@ const identifyBank = cellsOfCsvString => {
   return bank
 }
 
+const getFileString = fileName => {
+  const csvPath = path.resolve(CSV_INPUT_DIRECTORY, fileName)
+  const csvBuffer = fs.readFileSync(csvPath)
+  return csvBuffer.toString()
+}
+
 const createDateString = ({ year, month, day }) => {
   const monthPadded = String(month).padStart(2, '0')
   const dayPadded = String(day).padStart(2, '0')
@@ -42,12 +52,8 @@ const run = async () => {
   })
 
   const transactionsByBank = csvFileNames.map(fileName => {
-    const csvPath = path.resolve(CSV_INPUT_DIRECTORY, fileName)
-    const csvBuffer = fs.readFileSync(csvPath)
-    const fileString = csvBuffer.toString()
-
-    const rowsOfCsvString = fileString.split(/\r\n|\n/)
-    const cellsOfCsvString = rowsOfCsvString.map(parseCells)
+    const fileString = getFileString(fileName)
+    const cellsOfCsvString = splitFileStringToCells(fileString)
 
     const parserLookupKey = identifyBank(cellsOfCsvString)
 
