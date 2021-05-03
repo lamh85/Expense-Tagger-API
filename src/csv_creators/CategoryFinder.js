@@ -1,4 +1,4 @@
-import { isNumber } from '../NumberHelper.js'
+import { isNumber } from './NumberHelper.js'
 
 const categoriesLookup = {
   'Dine out': ['Cafe DOROTHY', 'bubble world'],
