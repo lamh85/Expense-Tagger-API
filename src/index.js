@@ -1,24 +1,64 @@
-import {
-  getCsvArray,
-  getVendorIndex
-} from './CsvReader.js'
+import * as BANKS from './bank_names.js'
+import { getCellsByFile } from './input_parser.js'
 import { createPcFinancialCsv } from './csv_creators/PCFinancial.js'
 import { createCoastCapitalObjects } from './csv_creators/CoastCapital.js'
 
-// const appendCategories = (csvArray, vendorIndex) => {
-//   return csvArray.map((row, rowIndex) => {
-    // if (rowIndex == 0) return [...row, 'Category']
+export const splitFileStringToCells = fileString => {
+  const rows = fileString.split(/\r\n|\n/)
 
-    // return [...row, matchedCategory]
-//   })
-// }
+  return rows.map(row => {
+    const numberCommasRemoved = row.replace(/([0-9]),([0-9])/, '$1$2')
+    return numberCommasRemoved.split(',')
+  })
+}
 
-const run = () => {
-  const csvArray = getCsvArray()
-  // const vendorIndex = getVendorIndex(csvArray)
-  // return appendCategories(csvArray, vendorIndex)
-  // return createCoastCapitalObjects(csvArray)
-  return createPcFinancialCsv(csvArray)
+const identifyBank = cellsOfCsvString => {
+  const headerCells = cellsOfCsvString[0]
+
+  let bank
+  if (headerCells.length === 5 && headerCells[0].includes('Unique ID')) {
+    bank = BANKS.COAST_CAPITAL
+  }
+
+  if (headerCells.length === 6 && headerCells[0].includes('Description')) {
+    bank = BANKS.PC_FINANCIAL
+  }
+
+  return bank
+}
+
+const createDateString = ({ year, month, day }) => {
+  const monthPadded = String(month).padStart(2, '0')
+  const dayPadded = String(day).padStart(2, '0')
+  return [year, monthPadded, dayPadded].join('-')
+}
+
+const run = async () => {
+  const cellsByFile = getCellsByFile()
+
+  const transactionsByBank = cellsByFile.map(fileCells => {
+    const parserLookupKey = identifyBank(fileCells)
+
+    return {
+      [BANKS.COAST_CAPITAL]: createCoastCapitalObjects,
+      [BANKS.PC_FINANCIAL]: createPcFinancialCsv
+    }[parserLookupKey](fileCells)
+  })
+
+  const flattenedTransactions = [].concat(...transactionsByBank)
+
+  const withFormattedDates = flattenedTransactions.map(transaction => {
+    return {
+      ...transaction,
+      date: createDateString(transaction)
+    }
+  })
+
+  return withFormattedDates.sort((a, b) => {
+    if (a.date > b.date) return 1
+    if (a.date < b.date) return -1
+    return 0
+  })
 }
 
 console.dir(run(), { 'maxArrayLength': null })
