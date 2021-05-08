@@ -17,9 +17,43 @@ const parseDate = rawDate => {
   }
 }
 
-const SOURCE_CSV_INDEX = { VENDOR: 0, DATE: 3, AMOUNT: 5 }
+// sample: "10:17 PM"
+const parseTime = rawTime => {
+  const amOrPm = rawTime.split(' ')[1]
+  const twelveHourTime = rawTime.split(' ')[0]
+  const hourRaw = twelveHourTime.split(':')[0]
+
+  let hourNormalized = parseInt(hourRaw)
+  if (amOrPm === 'PM' && hourNormalized < 12) {
+    hourNormalized += 12
+  }
+
+  if (amOrPm === 'AM' && hourNormalized === 12) {
+    hourNormalized = 0
+  }
+
+  const minuteRaw = twelveHourTime.split(':')[1]
+  const minute = parseInt(minuteRaw)
+
+  return {
+    hour: hourNormalized,
+    minute
+  }
+}
+
+const SOURCE_CSV_INDEX = { VENDOR: 0, DATE: 3, TIME: 4, AMOUNT: 5 }
 
 const SOURCE_CSV_COLUMNS_COUNT = 6
+
+const createTransactionId = ({ sourceDate, sourceTime }) => {
+  const { year, month, day } = parseDate(sourceDate)
+  const { hour, minute } = parseTime(sourceTime)
+
+  const monthArg = month - 1
+
+  const dateObj = new Date(year, monthArg, day, hour, minute)
+  return +dateObj
+}
 
 export const createPcFinancialCsv = csvArray => {
   const mapped = csvArray.map((sourceRow, index) => {
@@ -30,6 +64,9 @@ export const createPcFinancialCsv = csvArray => {
     const sourceDate = sourceRow[SOURCE_CSV_INDEX.DATE]
     const { day, year, month } = parseDate(sourceDate)
 
+    const sourceTime = sourceRow[SOURCE_CSV_INDEX.TIME]
+    const bankTransactionId = createTransactionId({ sourceDate, sourceTime })
+
     const sourceAmount = sourceRow[SOURCE_CSV_INDEX.AMOUNT]
     const amount = parseAmount(sourceAmount)
 
@@ -38,7 +75,7 @@ export const createPcFinancialCsv = csvArray => {
 
     const bank = 'PC Financial'
 
-    return { day, year, month, amount, vendor, category, bank }
+    return { bankTransactionId, day, year, month, amount, vendor, category, bank }
   })
 
   return mapped.filter(item => ![undefined, null].includes(item))
