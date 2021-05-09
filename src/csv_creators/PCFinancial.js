@@ -1,5 +1,9 @@
 import { findCategory } from './CategoryFinder.js'
 
+const SOURCE_CSV_INDEX = { VENDOR: 0, DATE: 3, TIME: 4, AMOUNT: 5 }
+
+const SOURCE_CSV_COLUMNS_COUNT = 6
+
 const parseAmount = rawAmount => {
   const removedQuotes = rawAmount.replace(/"/g, '')
   const numberType = parseFloat(removedQuotes)
@@ -19,11 +23,13 @@ const parseDate = rawDate => {
 
 // sample: "10:17 PM"
 const parseTime = rawTime => {
-  const amOrPm = rawTime.split(' ')[1]
-  const twelveHourTime = rawTime.split(' ')[0]
+  const withoutQuotes = rawTime.replace(/"/g, '')
+  const amOrPm = withoutQuotes.split(' ')[1]
+  const twelveHourTime = withoutQuotes.split(' ')[0]
   const hourRaw = twelveHourTime.split(':')[0]
 
   let hourNormalized = parseInt(hourRaw)
+
   if (amOrPm === 'PM' && hourNormalized < 12) {
     hourNormalized += 12
   }
@@ -41,18 +47,16 @@ const parseTime = rawTime => {
   }
 }
 
-const SOURCE_CSV_INDEX = { VENDOR: 0, DATE: 3, TIME: 4, AMOUNT: 5 }
-
-const SOURCE_CSV_COLUMNS_COUNT = 6
-
 const createTransactionId = ({ sourceDate, sourceTime }) => {
   const { year, month, day } = parseDate(sourceDate)
   const { hour, minute } = parseTime(sourceTime)
 
   const monthArg = month - 1
 
+  // PC Financial's date-times are already in GMT
   const dateObj = new Date(year, monthArg, day, hour, minute)
-  return +dateObj
+
+  return 'PCF' + (+dateObj)
 }
 
 export const createPcFinancialCsv = csvArray => {
