@@ -56,7 +56,7 @@ const createTransactionId = ({ sourceDate, sourceTime }) => {
   // PC Financial's date-times are already in GMT
   const dateObj = new Date(year, monthArg, day, hour, minute)
 
-  return 'PCF' + (+dateObj)
+  return +dateObj
 }
 
 export const createPcFinancialCsv = csvArray => {
