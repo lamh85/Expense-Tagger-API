@@ -59,6 +59,11 @@ const createTransactionId = ({ sourceDate, sourceTime }) => {
   return +dateObj
 }
 
+const getVendor = sourceRow => {
+  const cell = sourceRow[SOURCE_CSV_INDEX.VENDOR]
+  return cell.replace(/"/g, '')
+}
+
 export const createPcFinancialCsv = csvArray => {
   const mapped = csvArray.map((sourceRow, index) => {
     if (index === 0) return
@@ -74,7 +79,7 @@ export const createPcFinancialCsv = csvArray => {
     const sourceAmount = sourceRow[SOURCE_CSV_INDEX.AMOUNT]
     const amount = parseAmount(sourceAmount)
 
-    const vendor = sourceRow[SOURCE_CSV_INDEX.VENDOR]
+    const vendor = getVendor(sourceRow)
     const category = findCategory(vendor)
 
     const bank = 'PC Financial'
