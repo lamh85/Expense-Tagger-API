@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/lamh85/Expense-Tagger-API/issues"
   },
-  "homepage": "https://github.com/lamh85/Expense-Tagger-API#readme"
+  "homepage": "https://github.com/lamh85/Expense-Tagger-API#readme",
+  "dependencies": {
+    "yargs": "^17.0.1"
+  }
 }
