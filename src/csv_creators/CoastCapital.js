@@ -1,6 +1,6 @@
 import { findCategory } from './CategoryFinder.js'
 
-const SOURCE_CSV_INDEX = { VENDOR: 2, DATE: 1, AMOUNT: 3 }
+const SOURCE_CSV_INDEX = { TRANSACTION_ID: 0, VENDOR: 2, DATE: 1, AMOUNT: 3 }
 
 const SOURCE_CSV_COLUMNS_COUNT = 5
 
@@ -38,11 +38,18 @@ const parseAmount = rawAmount => {
   return Math.abs(numberType)
 }
 
+const getVendor = sourceRow => {
+  const cell = sourceRow[SOURCE_CSV_INDEX.VENDOR]
+  return cell.replace(/"/g, '')
+}
+
 export const createCoastCapitalObjects = csvArray => {
   const mapped = csvArray.map((sourceRow, index) => {
     if (index === 0) return
     if (!Array.isArray(sourceRow)) return
     if (sourceRow.length !== SOURCE_CSV_COLUMNS_COUNT) return
+
+    const bankTransactionId = sourceRow[SOURCE_CSV_INDEX.TRANSACTION_ID]
 
     const sourceDate = sourceRow[SOURCE_CSV_INDEX.DATE]
     const { day, year, month } = parseDate(sourceDate)
@@ -50,12 +57,12 @@ export const createCoastCapitalObjects = csvArray => {
     const sourceAmount = sourceRow[SOURCE_CSV_INDEX.AMOUNT]
     const amount = parseAmount(sourceAmount)
 
-    const vendor = sourceRow[SOURCE_CSV_INDEX.VENDOR]
+    const vendor = getVendor(sourceRow)
     const category = findCategory(vendor)
 
     const bank = 'Coast Capital'
 
-    return { day, year, month, amount, vendor, category, bank }
+    return { bankTransactionId, day, year, month, amount, vendor, category, bank }
   })
 
   return mapped.filter(item => ![undefined, null].includes(item))
