@@ -66,6 +66,6 @@ const run = async () => {
 
 const commandParams = yargs(hideBin(process.argv)).argv
 
-console.log(commandParams.columns.split(','))
+console.log(commandParams?.columns?.split(','))
 
 console.dir(run(), { 'maxArrayLength': null })
