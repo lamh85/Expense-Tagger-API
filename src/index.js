@@ -1,3 +1,6 @@
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+
 import * as BANKS from './bank_names.js'
 import { getCellsByFile } from './input_parser.js'
 import { createPcFinancialCsv } from './csv_creators/PCFinancial.js'
@@ -60,5 +63,9 @@ const run = async () => {
     return 0
   })
 }
+
+const commandParams = yargs(hideBin(process.argv)).argv
+
+console.log(commandParams?.columns?.split(','))
 
 console.dir(run(), { 'maxArrayLength': null })
