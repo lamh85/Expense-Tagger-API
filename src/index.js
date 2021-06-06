@@ -36,7 +36,17 @@ const createDateString = ({ year, month, day }) => {
   return [year, monthPadded, dayPadded].join('-')
 }
 
+const getCommandQuery = () => {
+  const commandParams = yargs(hideBin(process.argv)).argv
+
+  const columns = commandParams?.columns?.split(',')
+
+  return { columns }
+}
+
 const run = async () => {
+  const { columns: columnSelected } = getCommandQuery()
+
   const cellsByFile = getCellsByFile()
 
   const transactionsByBank = cellsByFile.map(fileCells => {
@@ -64,8 +74,7 @@ const run = async () => {
   })
 }
 
-const commandParams = yargs(hideBin(process.argv)).argv
-
-console.log(commandParams?.columns?.split(','))
-
 console.dir(run(), { 'maxArrayLength': null })
+
+// column options
+// bankTransactionId, day, year, month, amount, vendor, category, bank
