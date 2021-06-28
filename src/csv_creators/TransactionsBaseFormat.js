@@ -22,8 +22,38 @@ const BANK_PROPERTIES = {
   }
 }
 
-const parseDate = rawDate => {
+const MONTH_NUMBER_LOOKUP = {
+  Jan: 1,
+  Feb: 2,
+  Mar: 3,
+  Apr: 4,
+  May: 5,
+  Jun: 6,
+  Jul: 7,
+  Aug: 8,
+  Sep: 9,
+  Oct: 10,
+  Nov: 11,
+  Dec: 12
+}
 
+const getDate = rawDate => {
+  const removedQuotes = rawDate.replace(/"/g, '')
+  const parts = removedQuotes.split(/[^a-zA-Z0-9]/g)
+
+  const monthRaw = parts[0]
+  const containsLetter = !!monthRaw.match(/[A-Za-z]/g)
+
+  let monthNumber = monthRaw
+  if (containsLetter) {
+    monthNumber = MONTH_NUMBER_LOOKUP[monthRaw]
+  }
+
+  return {
+    year: parseInt(parts[2]),
+    month: monthNumber,
+    day: parseInt(parts[1])
+  }
 }
 
 // sample: "10:17 PM"
@@ -60,12 +90,23 @@ const createPCFTransId = sourceRow => {
 
   const rawDate = sourceRow[dateIndex]
   const rawTime = sourceRow[timeIndex]
+
+  const { year, month, day } = getDate(rawDate)
+  const { hour, minute } = parseTwelveHourTime(rawTime)
+  const monthArg = month - 1
+
+  // PC Financial's date-times are already in GMT
+  const dateObj = new Date(year, monthArg, day, hour, minute)
+
+  return +dateObj
 }
 
 const getBankTransactionId = ({ sourceRow, bankName }) => {
   if (bankName === BANKS.COAST_CAPITAL) {
     return sourceRow[BANK_PROPERTIES.COAST_CAPITAL.COLUMN_INDEX.TRANSACTION_ID]
   }
+
+  return createPCFTransId(sourceRow)
 }
 
 const PARSER_LOOKUP = {
