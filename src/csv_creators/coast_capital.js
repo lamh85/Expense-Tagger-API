@@ -1,4 +1,4 @@
-import { findCategory } from './CategoryFinder.js'
+import { findCategory } from './category_finder.js'
 
 const SOURCE_CSV_INDEX = { TRANSACTION_ID: 0, VENDOR: 2, DATE: 1, AMOUNT: 3 }
 
