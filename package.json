@@ -23,5 +23,8 @@
   "homepage": "https://github.com/lamh85/Expense-Tagger-API#readme",
   "dependencies": {
     "yargs": "^17.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.3"
   }
 }
