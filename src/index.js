@@ -40,12 +40,12 @@ const run = async () => {
   const cellsByFile = getCellsByFile()
 
   const transactionsByBank = cellsByFile.map(fileCells => {
-    const parserLookupKey = identifyBank(fileCells)
+    const bankName = identifyBank(fileCells)
 
     return {
       [BANKS.COAST_CAPITAL]: createCoastCapitalObjects,
       [BANKS.PC_FINANCIAL]: createPcFinancialCsv
-    }[parserLookupKey](fileCells)
+    }[bankName](fileCells)
   })
 
   const flattenedTransactions = [].concat(...transactionsByBank)
