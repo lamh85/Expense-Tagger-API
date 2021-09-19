@@ -39,6 +39,8 @@ const createDateString = ({ year, month, day }) => {
 const getCommandQuery = () => {
   const commandParams = yargs(hideBin(process.argv)).argv
 
+  // column options
+  // bankTransactionId, day, year, month, amount, vendor, category, bank
   const columns = commandParams?.columns?.split(',')
 
   return { columns }
@@ -46,6 +48,8 @@ const getCommandQuery = () => {
 
 const run = async () => {
   const { columns: columnSelected } = getCommandQuery()
+  console.log('CLI columns option: -----')
+  console.log(columnSelected)
 
   const cellsByFile = getCellsByFile()
 
@@ -75,6 +79,3 @@ const run = async () => {
 }
 
 console.dir(run(), { 'maxArrayLength': null })
-
-// column options
-// bankTransactionId, day, year, month, amount, vendor, category, bank
