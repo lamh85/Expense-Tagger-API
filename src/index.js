@@ -5,6 +5,7 @@ import * as BANKS from './bank_names.js'
 import { getCellsByFile } from './input_parser.js'
 import { createPcFinancialCsv } from './csv_creators/pc_financial.js'
 import { createCoastCapitalObjects } from './csv_creators/coast_capital.js'
+import dbClient from './models/postgres_client.js'
 
 export const splitFileStringToCells = fileString => {
   const rows = fileString.split(/\r\n|\n/)
