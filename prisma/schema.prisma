@@ -23,16 +23,16 @@ generator client {
 // }
 
 model transaction {
-  id            Int       @id @default(autoincrement())
-  transactionId String    @unique
-  date          BigInt
-  amount        Decimal   @db.Decimal(5,2) // Max $99,999.99
-  vendor        String
-  category      String
-  bank          String
-  created_at    DateTime  @default(now())
+  id              Int       @id @default(autoincrement())
+  transaction_id  String    @unique
+  date            BigInt
+  amount          Decimal   @db.Decimal(5,2) // Max $99,999.99
+  vendor          String
+  category        String
+  bank            String
+  created_at      DateTime  @default(now())
 
-  @@unique([transactionId, bank])
+  @@unique([transaction_id, bank])
   // category    category  @relation(fields: [category_id], references: [id])
   // bank        bank      @relation(fields: [bank_id], references: [id])
 }
