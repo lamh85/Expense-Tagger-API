@@ -10,6 +10,10 @@ exports.up = pgm => {
         type: 'text',
         notNull: true,
       },
+      bank_transaction_id: {
+        type: 'text',
+        notNull: true
+      },
       date: {
         type: 'bigint',
         notNull: true,
@@ -23,9 +27,8 @@ exports.up = pgm => {
         notNull: true,
       },
       category: 'text',
-      bank_id: {
-        type: 'smallint',
-        references: 'bank',
+      bank: {
+        type: 'text',
         notNull: true,
       },
       created_at: {
