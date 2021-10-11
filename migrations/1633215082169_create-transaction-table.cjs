@@ -27,7 +27,7 @@ exports.up = pgm => {
         notNull: true,
       },
       category: 'text',
-      bank: {
+      bank_name: {
         type: 'text',
         notNull: true,
       },
