@@ -5,7 +5,8 @@ import * as BANKS from './bank_names.js'
 import { getCellsByFile } from './input_parser.js'
 import { createPcFinancialCsv } from './csv_creators/pc_financial.js'
 import { createCoastCapitalObjects } from './csv_creators/coast_capital.js'
-import dbClient from './models/postgres_client.js'
+// import dbClient from './models/postgres_client.js'
+import getStatement from './statement_downloaders/pc_financial.js'
 
 export const splitFileStringToCells = fileString => {
   const rows = fileString.split(/\r\n|\n/)
@@ -79,4 +80,8 @@ const run = async () => {
   })
 }
 
-console.dir(run(), { 'maxArrayLength': null })
+// console.dir(run(), { 'maxArrayLength': null })
+
+const statement = await getStatement()
+
+console.log(statement)
